@@ -4,6 +4,8 @@ namespace Klepak\RestClient\Clients;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Klepak\RestClient\Exceptions\MissingRouteException;
 use Klepak\RestClient\Exceptions\RestException;
 use Klepak\RestClient\Interfaces\TokenInterface;
@@ -16,6 +18,8 @@ class RestClient
     private $route;
 
     private $filter;
+
+    private $debug = false;
 
     public function __construct(string $baseUri)
     {
@@ -51,42 +55,68 @@ class RestClient
         if(is_null($route))
             throw new MissingRouteException();
 
+        if(!Str::startsWith($route, '/'))
+            $route = '/'.$route;
+
         return $route;
     }
 
     private function getHeaders($headers = [])
     {
         if(!is_null($this->token) && !isset($headers['Authorization']))
-            $headers['Authorization'] = $this->token->getType() . ' ' . $this->token->getAccessToken();
+            $headers['Authorization'] = 'Bearer ' . $this->token->getAccessToken();
+
+        return $headers;
     }
 
     private function getQueryParams($params = [])
     {
         if(!is_null($this->filter) && !isset($params['$filter']))
             $params['$filter'] = $this->filter;
+
+        return $params;
     }
 
     public function get($route = null)
     {
         $url = $this->baseUri . $this->getRoute($route);
 
+        $options = [
+            'query' => $this->getQueryParams(),
+            'headers' => $this->getHeaders()
+        ];
+
+        $this->debugLog("GET $url", $options);
+
         $client = new Client();
 
         try
         {
-            $response = $client->get($url, [
-                'query' => $this->getQueryParams(),
-                'headers' => $this->getHeaders()
-            ]);
+            $response = $client->get($url, $options);
 
             return new RestClientResponse($route, $response);
         }
         catch(ClientException $clientException)
         {
+            $response = $clientException->getResponse();
+
             throw new RestException(
-                (string)$clientException->getResponse()->getBody(),
+                "{$response->getStatusCode()} {$response->getReasonPhrase()}: " . (string)$response->getBody(),
                 $clientException
             );
         }
+    }
+
+    public function debug(bool $debug)
+    {
+        $this->debug = $debug;
+
+        return $this;
+    }
+
+    private function debugLog(string $message, $context = null)
+    {
+        if($this->debug)
+            Log::debug($message, $context);
     }
 }
