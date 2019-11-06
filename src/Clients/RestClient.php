@@ -19,6 +19,8 @@ class RestClient
 
     private $filter;
 
+    protected $responseDataKey;
+
     private $debug = false;
 
     public function __construct(string $baseUri)
@@ -77,6 +79,11 @@ class RestClient
         return $params;
     }
 
+    public function response($route, $response)
+    {
+        return new RestClientResponse($route, $response, $this->responseDataKey);
+    }
+
     public function get($route = null)
     {
         $url = $this->baseUri . $this->getRoute($route);
@@ -94,7 +101,7 @@ class RestClient
         {
             $response = $client->get($url, $options);
 
-            return new RestClientResponse($route, $response);
+            return $this->response($route, $response);
         }
         catch(ClientException $clientException)
         {

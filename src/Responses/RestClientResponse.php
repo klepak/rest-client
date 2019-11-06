@@ -16,7 +16,7 @@ class RestClientResponse
 
     public $modelName;
 
-    public function __construct(string $route, Response $rawResponse)
+    public function __construct(string $route, Response $rawResponse, $dataKey = null)
     {
         $this->route = $route;
         $this->rawResponse = $rawResponse;
@@ -29,6 +29,9 @@ class RestClientResponse
         if(Str::startsWith($contentType, 'application/json'))
         {
             $this->data = json_decode($body);
+
+            if(!is_null($dataKey))
+                $this->data = $this->data->{$dataKey};
 
             if(!is_array($this->data))
                 $this->data = [$this->data];
