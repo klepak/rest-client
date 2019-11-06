@@ -1,7 +1,7 @@
 {
     "name": "klepak/rest-client",
     "description": "Rest client",
-    "type": "project",
+    "type": "library",
     "authors": [
         {
             "name": "Knut Leborg",
