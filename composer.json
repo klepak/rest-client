@@ -1,0 +1,50 @@
+{
+    "name": "klepak/rest-client",
+    "description": "Rest client",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Knut Leborg",
+            "email": "knut@lepa.no"
+        }
+    ],
+    "prefer-stable": true,
+    "minimum-stability": "dev",
+    "require": {
+        "guzzlehttp/guzzle": "~6.0",
+        "league/oauth2-client": "^2.4",
+        "illuminate/support": "^6.5"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^4.0",
+        "phpunit/phpunit": "^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Klepak\\RestClient\\": "src/",
+            "Klepak\\RestClient\\Database\\Seeds\\": "database/seeds/",
+            "Klepak\\RestClient\\Tests\\": "tests/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Klepak\\RestClient\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": ".\\vendor\\bin\\phpunit --testdox --verbose --stop-on-failure"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Klepak\\RestClient\\PoGoServiceProvider"
+            ]
+        }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://satis.selby.no"
+        }
+    ]
+}
