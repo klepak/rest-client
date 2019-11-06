@@ -5,6 +5,7 @@ namespace Klepak\RestClient\Clients;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Klepak\RestClient\Exceptions\MissingRouteException;
+use Klepak\RestClient\Exceptions\RestException;
 use Klepak\RestClient\Interfaces\TokenInterface;
 use Klepak\RestClient\Responses\RestClientResponse;
 
@@ -80,16 +81,12 @@ class RestClient
 
             return new RestClientResponse($route, $response);
         }
-        catch(ClientException $e)
+        catch(ClientException $clientException)
         {
-            /*Log::error("Request failed", [
-                'url' => $url,
-                'response' => (string)$e->getResponse()->getBody()
-            ]);*/
-
-            throw $e;
+            throw new RestException(
+                (string)$clientException->getResponse()->getBody(),
+                $clientException
+            );
         }
-
-
     }
 }

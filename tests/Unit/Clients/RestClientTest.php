@@ -2,17 +2,45 @@
 
 namespace Klepak\RestClient\Tests\Unit;
 
+use Illuminate\Support\Collection;
 use Klepak\RestClient\Clients\RestClient;
 use Klepak\RestClient\Tests\TestCase;
 
 class RestClientTest extends TestCase
 {
-    public function testStuff()
+    public function testCanGetBasicData()
     {
-        $client = new RestClient('https://jsonplaceholder.typicode.com');
+        $response = $this->getClient()->get('/todos/1');
 
-        $response = $client->get('/todos/1');
+        $this->assertInstanceOf(
+            Collection::class,
+            $response->data
+        );
 
-        dd($response);
+        $this->assertNotEmpty(
+            $response->data
+        );
     }
+
+    public function testCanSerializeBasicData()
+    {
+        $client = $this->getClient();
+
+        $response = $client->get('/todos');
+
+        $this->assertInstanceOf(
+            TestModel::class,
+            $response->asModel(TestModel::class)->models()->first()
+        );
+    }
+
+    public function getClient()
+    {
+        return new RestClient('https://jsonplaceholder.typicode.com');
+    }
+}
+
+class TestModel
+{
+
 }
