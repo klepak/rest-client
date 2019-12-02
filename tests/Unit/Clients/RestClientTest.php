@@ -22,6 +22,19 @@ class RestClientTest extends TestCase
         );
     }
 
+    public function testCanResetFilterAfterSuccessfulRequest()
+    {
+        $client = $this->getClient();
+
+        $client->filter('test');
+
+        $this->assertEquals('test', $client->filter);
+
+        $client->get('/todos/1');
+
+        $this->assertNull($client->filter);
+    }
+
     public function testCanSerializeBasicData()
     {
         $client = $this->getClient();

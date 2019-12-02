@@ -17,7 +17,7 @@ class RestClient
     private $token;
     private $route;
 
-    private $filter;
+    public $filter;
 
     protected $responseDataKey;
 
@@ -100,6 +100,8 @@ class RestClient
         try
         {
             $response = $client->get($url, $options);
+
+            $this->filter = null;
 
             return $this->response($route, $response);
         }
