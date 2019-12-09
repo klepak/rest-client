@@ -8,6 +8,24 @@ use Klepak\RestClient\Tests\TestCase;
 
 class RestClientTest extends TestCase
 {
+    public function testCanPostJson()
+    {
+        $response = $this->getClient()->postJson('/todos', [
+            'title' => 'Test todo',
+            'completed' => true
+        ]);
+
+        $this->assertEquals(
+            'Test todo',
+            $response->data->first()->title
+        );
+
+        $this->assertEquals(
+            true,
+            $response->data->first()->completed
+        );
+    }
+
     public function testCanGetBasicData()
     {
         $response = $this->getClient()->get('/todos/1');
