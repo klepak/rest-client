@@ -40,6 +40,20 @@ class RestClientTest extends TestCase
         );
     }
 
+    public function testCanGetBasicDataWhenDataKeyDoesntExist()
+    {
+        $response = $this->getMyClient()->get('/todos/1');
+
+        $this->assertInstanceOf(
+            Collection::class,
+            $response->data
+        );
+
+        $this->assertNotEmpty(
+            $response->data
+        );
+    }
+
     public function testCanResetFilterAfterSuccessfulRequest()
     {
         $client = $this->getClient();
@@ -69,6 +83,16 @@ class RestClientTest extends TestCase
     {
         return new RestClient('https://jsonplaceholder.typicode.com');
     }
+
+    public function getMyClient()
+    {
+        return new MyRestClient('https://jsonplaceholder.typicode.com');
+    }
+}
+
+class MyRestClient extends RestClient
+{
+    protected $responseDataKey = 'not-exist';
 }
 
 class TestModel
