@@ -40,11 +40,5 @@
                 "Klepak\\RestClient\\RestClientServiceProvider"
             ]
         }
-    },
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://satis.selby.no"
-        }
-    ]
+    }
 }
