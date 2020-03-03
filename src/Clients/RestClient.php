@@ -4,6 +4,7 @@ namespace Klepak\RestClient\Clients;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\RequestOptions;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Klepak\RestClient\Exceptions\MissingRouteException;
@@ -84,22 +85,41 @@ class RestClient
         return new RestClientResponse($route, $response, $this->responseDataKey);
     }
 
+
     public function get($route = null)
+    {
+        return $this->request('GET', $route);
+    }
+
+    public function postJson($route = null, $data)
+    {
+        return $this->request('POST', $route, [
+            RequestOptions::JSON => $data
+        ]);
+    }
+
+    public function request($method, $route = null, $options = [])
     {
         $url = $this->baseUri . $this->getRoute($route);
 
-        $options = [
+        $defaultOptions = [
             'query' => $this->getQueryParams(),
             'headers' => $this->getHeaders()
         ];
 
-        $this->debugLog("GET $url", $options);
+        foreach($defaultOptions as $key => $value)
+        {
+            if(!isset($options[$key]))
+                $options[$key] = $value;
+        }
+
+        $this->debugLog("$method $url", $options);
 
         $client = new Client();
 
         try
         {
-            $response = $client->get($url, $options);
+            $response = $client->request($method, $url, $options);
 
             $this->filter = null;
 

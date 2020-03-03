@@ -30,7 +30,7 @@ class RestClientResponse
         {
             $this->data = json_decode($body);
 
-            if(!is_null($dataKey))
+            if(!is_null($dataKey) && isset($this->data->{$dataKey}))
                 $this->data = $this->data->{$dataKey};
 
             if(!is_array($this->data))
