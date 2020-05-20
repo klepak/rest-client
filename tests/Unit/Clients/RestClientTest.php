@@ -4,10 +4,26 @@ namespace Klepak\RestClient\Tests\Unit;
 
 use Illuminate\Support\Collection;
 use Klepak\RestClient\Clients\RestClient;
+use Klepak\RestClient\Interfaces\TokenInterface;
 use Klepak\RestClient\Tests\TestCase;
 
 class RestClientTest extends TestCase
 {
+    public function testCanMergeOptions()
+    {
+        $client = $this->getClient();
+        $client->token(new MyToken());
+
+        $options = $client->mergeOptions([
+            'headers' => [
+                'Content-Type' => 'application/json'
+            ]
+        ]);
+
+        $this->assertArrayHasKey('Content-Type', $options['headers']);
+        $this->assertArrayHasKey('Authorization', $options['headers']);
+    }
+
     public function testCanPostJson()
     {
         $response = $this->getClient()->postJson('/todos', [
@@ -17,6 +33,42 @@ class RestClientTest extends TestCase
 
         $this->assertEquals(
             'Test todo',
+            $response->data->first()->title
+        );
+
+        $this->assertEquals(
+            true,
+            $response->data->first()->completed
+        );
+    }
+
+    public function testCanPostAsJson()
+    {
+        $response = $this->getClient()->postAsJson('/todos', [
+            'title' => 'Test todo',
+            'completed' => true
+        ]);
+
+        $this->assertEquals(
+            'Test todo',
+            $response->data->first()->title
+        );
+
+        $this->assertEquals(
+            true,
+            $response->data->first()->completed
+        );
+    }
+
+    public function testCanPostJsonString()
+    {
+        $response = $this->getClient()->postJsonString('/todos', json_encode([
+            'title' => 'Test todo string',
+            'completed' => true
+        ]));
+
+        $this->assertEquals(
+            'Test todo string',
             $response->data->first()->title
         );
 
@@ -98,4 +150,28 @@ class MyRestClient extends RestClient
 class TestModel
 {
 
+}
+
+class MyToken implements  TokenInterface
+{
+
+    public function getAccessToken()
+    {
+        // TODO: Implement getAccessToken() method.
+    }
+
+    public function getRefreshToken()
+    {
+        // TODO: Implement getRefreshToken() method.
+    }
+
+    public function getExpiry()
+    {
+        // TODO: Implement getExpiry() method.
+    }
+
+    public function getType()
+    {
+        // TODO: Implement getType() method.
+    }
 }

@@ -91,20 +91,57 @@ class RestClient
         return $this->request('GET', $route);
     }
 
+    /**
+     * [deprecated] Use postAsJson
+     *
+     * @param null $route
+     * @param array|object $data
+     * @return RestClientResponse
+     * @throws RestException
+     */
     public function postJson($route = null, $data)
+    {
+        return $this->postAsJson($route, $data);
+    }
+
+    /**
+     * Takes a data array/object, converts it to json, then posts it
+     *
+     * @param null $route
+     * @param array|object $data
+     * @return RestClientResponse
+     * @throws RestException
+     */
+    public function postAsJson($route = null, $data)
     {
         return $this->request('POST', $route, [
             RequestOptions::JSON => $data
         ]);
     }
 
-    public function request($method, $route = null, $options = [])
-    {
-        $url = $this->baseUri . $this->getRoute($route);
 
+    /**
+     * Posts an already encoded json string
+     *
+     * @param string|null $route
+     * @param string $json
+     * @return RestClientResponse
+     * @throws RestException
+     */
+    public function postJsonString($route = null, string $json)
+    {
+        return $this->request('POST', $route, [
+            'body' => $json,
+            'headers' => [
+                'Content-Type' => 'application/json'
+            ]
+        ]);
+    }
+
+    public function mergeOptions($options)
+    {
         $defaultOptions = [
             'query' => $this->getQueryParams(),
-            'headers' => $this->getHeaders()
         ];
 
         foreach($defaultOptions as $key => $value)
@@ -112,6 +149,17 @@ class RestClient
             if(!isset($options[$key]))
                 $options[$key] = $value;
         }
+
+        $options['headers'] = $this->getHeaders($options['headers'] ?? []);
+
+        return $options;
+    }
+
+    public function request($method, $route = null, $options = [])
+    {
+        $url = $this->baseUri . $this->getRoute($route);
+
+        $options = $this->mergeOptions($options);
 
         $this->debugLog("$method $url", $options);
 
