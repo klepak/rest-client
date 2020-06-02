@@ -1,6 +1,6 @@
 <?php
 
-namespace Klepak\RestClient\Tests\Unit;
+namespace Klepak\RestClient\Tests\Unit\Clients;
 
 use Illuminate\Support\Collection;
 use Klepak\RestClient\Clients\RestClient;
@@ -12,7 +12,7 @@ class RestClientTest extends TestCase
     public function testCanMergeOptions()
     {
         $client = $this->getClient();
-        $client->token(new MyToken());
+        $client->token(new \Klepak\RestClient\Tests\Stubs\MyToken());
 
         $options = $client->mergeOptions([
             'headers' => [
@@ -126,8 +126,8 @@ class RestClientTest extends TestCase
         $response = $client->get('/todos');
 
         $this->assertInstanceOf(
-            TestModel::class,
-            $response->asModel(TestModel::class)->models()->first()
+            \Klepak\RestClient\Tests\Stubs\TestModel::class,
+            $response->asModel(\Klepak\RestClient\Tests\Stubs\TestModel::class)->models()->first()
         );
     }
 
@@ -138,40 +138,6 @@ class RestClientTest extends TestCase
 
     public function getMyClient()
     {
-        return new MyRestClient('https://jsonplaceholder.typicode.com');
-    }
-}
-
-class MyRestClient extends RestClient
-{
-    protected $responseDataKey = 'not-exist';
-}
-
-class TestModel
-{
-
-}
-
-class MyToken implements  TokenInterface
-{
-
-    public function getAccessToken()
-    {
-        // TODO: Implement getAccessToken() method.
-    }
-
-    public function getRefreshToken()
-    {
-        // TODO: Implement getRefreshToken() method.
-    }
-
-    public function getExpiry()
-    {
-        // TODO: Implement getExpiry() method.
-    }
-
-    public function getType()
-    {
-        // TODO: Implement getType() method.
+        return new \Klepak\RestClient\Tests\Stubs\MyRestClient('https://jsonplaceholder.typicode.com');
     }
 }
