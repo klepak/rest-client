@@ -98,6 +98,7 @@ class RestClient
      * @param array|object $data
      * @return RestClientResponse
      * @throws RestException
+     * @deprecated
      */
     public function postJson($route = null, $data)
     {
