@@ -11,7 +11,7 @@
     "prefer-stable": true,
     "minimum-stability": "dev",
     "require": {
-        "guzzlehttp/guzzle": "^6.3",
+        "guzzlehttp/guzzle": "^7.2",
         "league/oauth2-client": "^2.4",
         "illuminate/support": "^6.0|^7.0"
     },
