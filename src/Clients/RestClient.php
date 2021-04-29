@@ -100,7 +100,7 @@ class RestClient
      * @throws RestException
      * @deprecated
      */
-    public function postJson($route = null, $data)
+    public function postJson(string $route, $data)
     {
         return $this->postAsJson($route, $data);
     }
@@ -113,7 +113,7 @@ class RestClient
      * @return RestClientResponse
      * @throws RestException
      */
-    public function postAsJson($route = null, $data)
+    public function postAsJson(string $route, $data)
     {
         return $this->request('POST', $route, [
             RequestOptions::JSON => $data
@@ -129,7 +129,7 @@ class RestClient
      * @return RestClientResponse
      * @throws RestException
      */
-    public function postJsonString($route = null, string $json)
+    public function postJsonString(string $route, string $json)
     {
         return $this->request('POST', $route, [
             'body' => $json,
