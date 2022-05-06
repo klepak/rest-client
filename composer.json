@@ -1,45 +1,44 @@
 {
-    "name": "klepak/rest-client",
-    "description": "Rest client",
-    "type": "library",
-    "authors": [
-        {
-            "name": "Knut Leborg",
-            "email": "knut@lepa.no"
-        }
-    ],
-    "prefer-stable": true,
-    "minimum-stability": "dev",
-    "require": {
-        "guzzlehttp/guzzle": "^7.2",
-        "league/oauth2-client": "^2.4",
-        "illuminate/support": "^6.0|^7.0|^8.0"
-    },
-    "require-dev": {
-        "orchestra/testbench": "^4.0|^5.0",
-        "phpunit/phpunit": "^8.0|^9.0",
-      "ext-json": "*"
-    },
-    "autoload": {
-        "psr-4": {
-            "Klepak\\RestClient\\": "src/",
-            "Klepak\\RestClient\\Database\\Seeds\\": "database/seeds/",
-            "Klepak\\RestClient\\Tests\\": "tests/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Klepak\\RestClient\\Tests\\": "tests/"
-        }
-    },
-    "scripts": {
-        "test": ".\\vendor\\bin\\phpunit --testdox --verbose --stop-on-failure"
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Klepak\\RestClient\\RestClientServiceProvider"
-            ]
-        }
+  "name": "klepak/rest-client",
+  "description": "Rest client",
+  "type": "library",
+  "authors": [
+    {
+      "name": "Knut Leborg",
+      "email": "knut@lepa.no"
     }
+  ],
+  "prefer-stable": true,
+  "minimum-stability": "dev",
+  "require": {
+    "guzzlehttp/guzzle": "^7.2",
+    "league/oauth2-client": "^2.4",
+    "illuminate/support": "^6.0|^7.0|^8.0|^9.0"
+  },
+  "require-dev": {
+    "orchestra/testbench": "^4.0|^5.0|^6.24|^7.4",
+    "phpunit/phpunit": "^8.0|^9.0",
+    "ext-json": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Klepak\\RestClient\\": "src/",
+      "Klepak\\RestClient\\Tests\\": "tests/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Klepak\\RestClient\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": "phpunit"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Klepak\\RestClient\\RestClientServiceProvider"
+      ]
+    }
+  }
 }
